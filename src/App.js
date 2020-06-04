@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
+import { 
+  BrowserRouter as Router,
+} from 'react-router-dom';
+import Dashboard from './components/Dashboard';
+import {getfromStorage} from './Utils/storage';
+import Appbar from './components/Appbar';
 import './App.css';
 
+export const AuthContext = React.createContext();
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <Router>
+    <Authprovider>
+      <Appbar/>
+      <Dashboard />
+      </Authprovider>
+    </Router>;
+}
+
+function Authprovider({children}) {
+  const [loggedIn,setLoggedIn] = React.useState(getfromStorage('loggedIn'));
+  const value = {
+    loggedIn,
+    setLoggedIn
+  }
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export default App;
